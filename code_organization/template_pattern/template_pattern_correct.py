@@ -2,34 +2,48 @@ from typing import List
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-@dataclass
-class Application:
-    trading_strategy: str
+class Exchange(ABC):
 
-    def __connect(self):
-        print(f"Connecting to Crypto exchange")
+    @abstractmethod
+    def connect(self):
+        pass
+
+    @abstractmethod
+    def get_market_data(self, coin: str) -> List[float]:
+        pass
+
+
+class BinanceExchange(Exchange):
+
+    def connect(self):
+        print(f"Connecting to Binance exchange")
 
     def get_market_data(self, coin: str) -> List[float]:
         return [10, 12, 18, 14]
 
-    def list_average(self, l: List[float]) -> float:
-        return sum(l) / len(l)
+class CoinbaseExchange(Exchange):
 
+    def connect(self):
+        print(f"Connecting to Coinbase exchange")
+
+    def get_market_data(self, coin: str) -> List[float]:
+        return [10, 12, 18, 20]
+
+@dataclass
+class TradingBot(ABC):
+    exchange: Exchange
+
+    @abstractmethod
     def should_buy(self, prices: List[float]) -> bool:
-        if self.trading_strategy == 'minmax':
-            return prices[-1] == min(prices)
-        else:
-            return prices[-1] < self.list_average(prices)
+        pass
 
+    @abstractmethod
     def should_sell(self, prices: List[float]) -> bool:
-        if self.trading_strategy == 'minmax':
-            return prices[-1] == max(prices)
-        else:
-            return prices[-1] > self.list_average(prices)
+        pass
 
     def check_prices(self, coin: str) -> None:
-        self.__connect()
-        prices = self.get_market_data(coin=coin)
+        self.exchange.connect()
+        prices = self.exchange.get_market_data(coin=coin)
         should_buy = self.should_buy(prices)
         should_sell = self.should_sell(prices)
         
@@ -41,6 +55,27 @@ class Application:
             print(f"No action needed for {coin}.")
 
 
+class AverageTrader(TradingBot):
+
+    def list_average(self, l: List[float]) -> float:
+        return sum(l) / len(l)
+
+    def should_buy(self, prices: List[float]) -> bool:
+        return prices[-1] < self.list_average(prices)
+
+    def should_sell(self, prices: List[float]) -> bool:
+        return prices[-1] > self.list_average(prices)
+
+
+class MixMaxTrader(TradingBot):
+
+    def should_buy(self, prices: List[float]) -> bool:
+        return prices[-1] == min(prices)
+
+    def should_sell(self, prices: List[float]) -> bool:
+        return prices[-1] == max(prices)
+
+
 if __name__ == '__main__':
-    app = Application("average")
+    app = AverageTrader(exchange=BinanceExchange())
     app.check_prices("BTC/USD")

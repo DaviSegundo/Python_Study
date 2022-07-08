@@ -1,0 +1,29 @@
+[
+    {
+        "title": "Zero to Hero",
+        "subtitle": "Notes to Startups",
+        "author": "Peter Thiel",
+        "publisher": "Ballantine Books",
+        "isbn_10": "0753555190",
+        "isbn_13": "978-0753555194",
+        "price": 14.29
+    },
+    {
+        "title": "Davi Books",
+        "subtitle": "Notes to Develop",
+        "author": "Davi Segundo",
+        "publisher": "UFC",
+        "isbn_10": "0753888190",
+        "isbn_13": "978-0753888194",
+        "price": 18.88
+    },
+    {
+        "title": "Camurça Books",
+        "subtitle": "Notes to UX",
+        "author": "Camurça",
+        "publisher": "Camurça INC",
+        "isbn_10": "3333888190",
+        "isbn_13": "333-0753888194",
+        "price": 20.00
+    }
+]

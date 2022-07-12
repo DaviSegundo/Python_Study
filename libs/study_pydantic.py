@@ -72,7 +72,7 @@ class Book(pydantic.BaseModel):
 
 def main() -> None:
     """Load data from json and create list of books"""
-    with open('./data.json') as file:
+    with open('libs/data.json') as file:
         data: List[dict] = json.load(file)
         books_valid: List[Book] = []
         books_invalid: List[Book] = []

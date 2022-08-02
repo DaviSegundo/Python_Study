@@ -6,7 +6,8 @@ register/unregister methods.
 import json
 from dataclasses import dataclass
 
-from game.character import GameCharacter
+from game import factory
+from plugins import loader
 
 @dataclass
 class Sorcerer:
@@ -39,21 +40,20 @@ def main():
     """Creates game characters from a file containg a level definition.
     """
 
+    # register a couple of character types
+    factory.register("sorcerer", Sorcerer)
+    factory.register("witcher", Witcher)
+    factory.register("wizard", Wizard)
+
     # read data from a JSON file
-    with open("code_organization\plugin_architeture\level.json") as file:
+    with open("code_organization\plugin_architeture\level_with_plugins.json") as file:
         data = json.load(file)
 
+        # load the plugins
+        loader.load_plugins(data["plugins"])
+
         # create the characters
-        characters: list[GameCharacter] = []
-        for item in data["characters"]:
-            item_copy = item.copy()
-            character_type = item_copy.pop("type")
-            if character_type == "sorcerer":
-                characters.append(Sorcerer(**item_copy))
-            elif character_type == "wizard":
-                characters.append(Wizard(**item_copy))
-            elif character_type == "witcher":
-                characters.append(Witcher(**item_copy))
+        characters = [factory.create(item) for item in data["characters"]]
                 
         # do something with the characters
         for character in characters:

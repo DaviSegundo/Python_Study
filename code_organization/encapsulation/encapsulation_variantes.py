@@ -44,8 +44,8 @@ class OrderEncapsulationNoInformationHidding:
 
 @dataclass
 class OrderEncapsulationAndInformationHidding:
-    """The status variable is set to 'private'. The only thing you are supposed to use is the
-    method, you need to knowledge of how status is represented (that information is 'hidden')
+    """The status variable is set to 'private'. The only thing you are supposed to use is the is_paid
+    method, you need to knowledge of how status is represented (that information is 'hidden').
     """
 
     _payment_status: PaymentStatus = PaymentStatus.PENDING
@@ -60,3 +60,8 @@ class OrderEncapsulationAndInformationHidding:
         if self._payment_status == PaymentStatus.PAID:
             raise PaymentStatusError("You cant cancel an already paid order.")
         self._payment_status = PaymentStatus.CANCELLED
+
+    def pay(self) -> None:
+        if self._payment_status == PaymentStatus.PAID:
+            raise PaymentStatusError("Order is already paid.")
+        self._payment_status = PaymentStatus.PAID

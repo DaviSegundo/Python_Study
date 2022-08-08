@@ -10,11 +10,11 @@ erDiagram
         String id
         String name
     }
-    class Order{
+    Order{
         String id
         OrderStatus status
     }
-    class LineItem{
+    LineItem{
         String code
         String description
         int quantity

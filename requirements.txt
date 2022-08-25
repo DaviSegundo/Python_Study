@@ -1,2 +1,5 @@
 pydantic
 flask
+black
+bs4
+lxml

@@ -4,3 +4,4 @@ black
 bs4
 lxml
 httpx
+pandas
